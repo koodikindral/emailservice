@@ -1,6 +1,6 @@
 # Introduction
 
-E-Mail template configuration, translation and parser service. 
+Simple E-Mail template configuration, translation and parser service. 
 
 Ready to go microservice, using:
 - Gradle for build process
@@ -16,8 +16,12 @@ Ready to go microservice, using:
 git clone --depth 1 https://github.com/koodikindral/emailservice.git
 
 # Running the application
-nohup java -jar email-<version>.jar server configuration.yml > serverlog.log &
+nohup java -jar emailservice-<version>.jar server config.yml > serverlog.log &
 ```
+# API Documentation
+
+http://petstore.swagger.io/?url=http://api.gert.ee/swagger.json
+
 # Used technologies & tools
 
 - [Dropwizard](http://www.dropwizard.io/1.0.2/docs/)
