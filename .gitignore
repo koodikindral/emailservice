@@ -1,0 +1,8 @@
+.gradle/
+.idea/
+build/
+src/dagger/
+.classpath
+.project
+.settings
+bin

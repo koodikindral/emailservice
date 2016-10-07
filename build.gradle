@@ -1,0 +1,75 @@
+plugins {
+    id "com.ewerk.gradle.plugins.dagger" version "1.0.3"
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+group = 'ee.gert'
+version = '0.0.1'
+mainClassName = 'email.App'
+
+project.ext {
+    dropwizardVersion = '1.0.1'
+    daggerVersion = '2.0.1'
+    swaggerVersion='1.5.8'
+    jacksonVersion = '2.7.3'
+    rosettaVersion = '3.11.2'
+    postgreVersion = '9.4-1201-jdbc41'
+    flywayVersion = '1.0.0-1'
+    validationApiVersion = '1.1.0.Final'
+    stringtemplateVersion = '3.2.1'
+}
+
+run {
+    args 'server', 'config.yml'
+}
+
+dependencies {
+    compile "javax.validation:validation-api:${validationApiVersion}"
+    compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-auth:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-jdbi:${dropwizardVersion}"
+    compile "io.dropwizard.modules:dropwizard-flyway:${flywayVersion}"
+    compile "io.dropwizard:dropwizard-forms:${dropwizardVersion}"
+    compile "io.swagger:swagger-jersey2-jaxrs:${swaggerVersion}"
+    compile "com.google.dagger:dagger:${daggerVersion}"
+    compile "com.hubspot.rosetta:RosettaJdbi:${rosettaVersion}"
+    compile "org.postgresql:postgresql:${postgreVersion}"
+    compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "org.antlr:stringtemplate:${stringtemplateVersion}"
+    testCompile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
+}
+
+wrapper {
+    gradleVersion = '2.11'
+}
+
+jar {
+    manifest {
+        attributes "Implementation-Title": "Emailservice"
+        attributes "Implementation-Version": version
+        attributes "Main-Class" : mainClassName
+        attributes "Built-By" : System.getProperty('user.name')
+        attributes "Built-JDK" : System.getProperty('java.version') + " (" + System.getProperty('java.vendor') + " " + System.getProperty('java.vm.version') + ")"
+        attributes "Build-Time" : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+    }
+    // remove the security files so that the jar will be executable.
+    doFirst {
+        from (configurations.runtime.resolve().collect { it.isDirectory() ? it : zipTree(it) }) {
+            exclude 'META-INF/MANIFEST.MF'
+            exclude 'META-INF/*.SF'
+            exclude 'META-INF/*.DSA'
+            exclude 'META-INF/*.RSA'
+        }
+    }
+}

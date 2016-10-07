@@ -1,0 +1,15 @@
+database:
+  driverClass: org.postgresql.Driver
+  user: postgres
+  password: <password>
+  url: jdbc:postgresql://<db_url>/emailservice?currentSchema=application
+
+logging:
+  level: INFO
+  loggers:
+    email: DEBUG
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 8090
