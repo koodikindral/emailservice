@@ -2,27 +2,26 @@ package email.service;
 
 import dagger.Module;
 import dagger.Provides;
+import email.service.template.TemplateModule;
+import email.service.template.rs.TemplateResource;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
-import email.service.hello.HelloModule;
-import email.service.hello.rs.HelloResource;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
 
-@Module(includes = {
-    HelloModule.class})
+@Module(includes = { TemplateModule.class })
 
 
 public class RestModule {
 
   @Provides
   public RestRegistry provideRestRegistry(
-          HelloResource helloResource) {
+          TemplateResource templateResource) {
 
     return new RestRegistry(Arrays.asList(
-          helloResource));
+            templateResource));
   }
 
   public static class RestRegistry {
@@ -31,7 +30,7 @@ public class RestModule {
 
     @Inject
     public RestRegistry(
-        List<Object> resources) {
+            List<Object> resources) {
       this.resources = resources;
     }
 
@@ -42,7 +41,7 @@ public class RestModule {
     }
 
     public List<Object> getResources() {
-        return resources;
+      return resources;
     }
   }
 }
