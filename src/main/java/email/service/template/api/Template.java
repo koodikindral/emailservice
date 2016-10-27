@@ -2,11 +2,14 @@ package email.service.template.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
+
 public class Template {
 
   @JsonProperty
   private Long id;
 
+  @NotNull
   private String code;
 
   @JsonProperty
