@@ -74,6 +74,17 @@ public class TemplateResource {
     dao.updateTranslation(template, language);
     return dao.find(id, language);
   }
+  
+  @Timed
+  @DELETE
+  @ApiOperation("Delete Template")
+  @Path("{id}")
+  public Response update(
+          @PathParam("id") Long id) {
+    dao.delete(id);
+    dao.deleteTranslation(id);
+    return Response.status(Response.Status.NO_CONTENT).build();
+  }
 
   @Timed
   @POST
