@@ -15,6 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import org.antlr.stringtemplate.*;
 
 @Path("/templates")
 @Produces(MediaType.APPLICATION_JSON)
@@ -74,7 +75,7 @@ public class TemplateResource {
     dao.updateTranslation(template, language);
     return dao.find(id, language);
   }
-  
+
   @Timed
   @DELETE
   @ApiOperation("Delete Template")
@@ -92,7 +93,9 @@ public class TemplateResource {
   @ApiOperation("Test Template")
   @Path("test")
   public Response test() {
-    emailService.sendEmail("gert.vesterberg@gmail.com", "Test E-mail", "Hello World");
+    StringTemplate hello = new StringTemplate("Hello, $name$");
+    hello.setAttribute("name", "World");
+    emailService.sendEmail("gert.vesterberg@gmail.com", "Test E-mail", hello.toString());
     return Response.status(Response.Status.OK).build();
   }
 }
