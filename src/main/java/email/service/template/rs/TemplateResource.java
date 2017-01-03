@@ -1,6 +1,7 @@
 package email.service.template.rs;
 
 import com.codahale.metrics.annotation.Timed;
+import email.service.email.EmailService;
 import email.service.template.api.Template;
 import email.service.template.db.TemplateDao;
 import io.swagger.annotations.Api;
@@ -22,10 +23,12 @@ import java.util.List;
 public class TemplateResource {
 
   private final TemplateDao dao;
+  private final EmailService emailService;
 
   @Inject
-  public TemplateResource(TemplateDao dao) {
+  public TemplateResource(TemplateDao dao, EmailService emailService) {
     this.dao = dao;
+    this.emailService = emailService;
   }
 
   @Timed
@@ -73,13 +76,12 @@ public class TemplateResource {
   }
 
   @Timed
-  @DELETE
-  @ApiOperation("Delete Template")
-  @Path("{id}")
-  public Response update(
-          @PathParam("id") Long id) {
-    dao.delete(id);
-    dao.deleteTranslation(id);
-    return Response.status(Response.Status.NO_CONTENT).build();
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @ApiOperation("Test Template")
+  @Path("test")
+  public Response test() {
+    emailService.sendEmail("gert.vesterberg@gmail.com", "Test E-mail", "Hello World");
+    return Response.status(Response.Status.OK).build();
   }
 }

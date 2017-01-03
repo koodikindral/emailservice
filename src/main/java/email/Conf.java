@@ -11,4 +11,11 @@ public class Conf extends Configuration {
 
   @Valid @NotNull public DataSourceFactory database = new DataSourceFactory();
   @Valid @NotNull public FlywayFactory flyway = new FlywayFactory();
+  @Valid @NotNull public MailgunConf mailgun;
+
+  public static final class MailgunConf {
+    @Valid @NotNull public String api;
+    @Valid @NotNull public String apiKey;
+    @Valid @NotNull public String from;
+  }
 }

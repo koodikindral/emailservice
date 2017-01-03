@@ -3,6 +3,7 @@ package email;
 import dagger.Module;
 import dagger.Provides;
 import email.service.RestModule;
+import email.service.email.EmailService;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
 
@@ -37,5 +38,11 @@ public class AppModule {
   @Singleton
   DBI provideDbi() {
     return dbi;
+  }
+
+  @Provides
+  @Singleton
+  EmailService emailService() {
+    return new EmailService(conf);
   }
 }
