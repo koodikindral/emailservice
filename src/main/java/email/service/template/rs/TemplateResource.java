@@ -58,6 +58,7 @@ public class TemplateResource {
           @Valid @ApiParam(required = true) Template template,
           @DefaultValue("EN") @QueryParam("language") String language) {
     final Long id = dao.create(template);
+    template.setId(id);
     dao.updateTranslation(template, language);
     return dao.find(id, language);
   }
@@ -82,8 +83,8 @@ public class TemplateResource {
   @Path("{id}")
   public Response update(
           @PathParam("id") Long id) {
-    dao.delete(id);
     dao.deleteTranslation(id);
+    dao.delete(id);
     return Response.status(Response.Status.NO_CONTENT).build();
   }
 

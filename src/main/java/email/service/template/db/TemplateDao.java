@@ -12,12 +12,12 @@ import java.util.List;
 @UseStringTemplate3StatementLocator
 public interface TemplateDao {
 
-  @SqlQuery("SELECT tpl.id, tpl.code, tpl_t.body_text, tpl_t.body_html FROM emailtemplates tpl " +
+  @SqlQuery("SELECT tpl.id, tpl.code, tpl_t.title, tpl_t.body_text, tpl_t.body_html FROM emailtemplates tpl " +
             "LEFT JOIN emailtemplate_translations tpl_t ON tpl_t.emailtemplate_id = tpl.id AND tpl_t.country_code = :language " +
             "ORDER BY tpl.id ASC")
   List<Template> findAll(@Bind("language") String language);
 
-  @SqlQuery("SELECT tpl.id, tpl.code, tpl_t.body_text, tpl_t.body_html FROM emailtemplates tpl " +
+  @SqlQuery("SELECT tpl.id, tpl.code, tpl_t.title, tpl_t.body_text, tpl_t.body_html FROM emailtemplates tpl " +
             "LEFT JOIN emailtemplate_translations tpl_t ON tpl_t.emailtemplate_id = tpl.id AND tpl_t.country_code = :language " +
             "WHERE tpl.id = :id")
   Template find(@Bind("id") Long id, @Bind("language") String language);
@@ -29,8 +29,8 @@ public interface TemplateDao {
   @SqlUpdate("UPDATE emailtemplates SET code = COALESCE(:code, code) WHERE id = :id")
   void update(@Bind("id") Long id, @BindBean Template template);
 
-  @SqlUpdate("UPDATE emailtemplate_translations SET body_text = :bodyText, body_html = :bodyHtml WHERE country_code = :language AND emailtemplate_id = :id; " +
-             "INSERT INTO emailtemplate_translations (country_code, emailtemplate_id, body_text, body_html) SELECT :language, :id, :bodyText, :bodyHtml WHERE NOT EXISTS (SELECT 1 FROM emailtemplate_translations WHERE country_code = :language AND emailtemplate_id = :id)")
+  @SqlUpdate("UPDATE emailtemplate_translations SET title = :title, body_text = :bodyText, body_html = :bodyHtml WHERE country_code = :language AND emailtemplate_id = :id; " +
+             "INSERT INTO emailtemplate_translations (country_code, emailtemplate_id, title, body_text, body_html) SELECT :language, :id, :title, :bodyText, :bodyHtml WHERE NOT EXISTS (SELECT 1 FROM emailtemplate_translations WHERE country_code = :language AND emailtemplate_id = :id)")
   void updateTranslation(@BindBean Template template, @Bind("language") String language);
 
   @SqlUpdate("DELETE FROM emailtemplates WHERE id = :id")
