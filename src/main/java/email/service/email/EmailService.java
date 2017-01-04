@@ -30,17 +30,14 @@ public class EmailService {
             .target(mailgunConf.api);
   }
 
-  public Future<Response> sendEmail(String to, String subject, String content) {
-    return sendEmail(to, subject, content, mailgunConf.from);
-  }
-
-  private Future<Response> sendEmail(String to, String subject, String content, String from) {
+  public Future<Response> sendEmail(String to, String title, String bodyText, String bodyHtml) {
     return target.request().async().post(Entity.entity(
             new Form()
-                    .param("from", from)
+                    .param("from", mailgunConf.from)
                     .param("to", to)
-                    .param("subject", subject)
-                    .param("text", content),
+                    .param("subject", title)
+                    .param("text", bodyText)
+                    .param("html", bodyHtml),
             MediaType.APPLICATION_FORM_URLENCODED_TYPE));
   }
 }

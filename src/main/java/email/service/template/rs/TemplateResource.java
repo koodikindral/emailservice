@@ -92,11 +92,14 @@ public class TemplateResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation("Test Template")
-  @Path("test")
-  public Response test() {
-    StringTemplate hello = new StringTemplate("Hello, $name$");
-    hello.setAttribute("name", "World");
-    emailService.sendEmail("gert.vesterberg@gmail.com", "Test E-mail", hello.toString());
+  @Path("test/{id}")
+  public Response test(
+          @PathParam("id") Long id,
+          @DefaultValue("EN") @QueryParam("language") String language) {
+    Template template = dao.find(id, language);
+    //StringTemplate hello = new StringTemplate("Hello, $name$");
+    //hello.setAttribute("name", "World");
+    emailService.sendEmail("gert.vesterberg@gmail.com", template.getTitle(), template.getBodyText(), template.getBodyHtml());
     return Response.status(Response.Status.OK).build();
   }
 }
