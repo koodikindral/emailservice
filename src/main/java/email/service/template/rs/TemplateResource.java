@@ -92,7 +92,7 @@ public class TemplateResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation("Test Template")
-  @Path("test/{id}")
+  @Path("{id}/test")
   public Response test(
           @PathParam("id") Long id,
           @DefaultValue("EN") @QueryParam("language") String language) {
