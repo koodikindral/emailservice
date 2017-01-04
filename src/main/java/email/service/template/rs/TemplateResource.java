@@ -7,6 +7,7 @@ import email.service.template.db.TemplateDao;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.antlr.stringtemplate.StringTemplate;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,8 +15,9 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
-import org.antlr.stringtemplate.*;
+import java.util.Map;
 
 @Path("/templates")
 @Produces(MediaType.APPLICATION_JSON)
@@ -95,11 +97,18 @@ public class TemplateResource {
   @Path("{id}/test")
   public Response test(
           @PathParam("id") Long id,
-          @DefaultValue("EN") @QueryParam("language") String language) {
-    Template template = dao.find(id, language);
-    //StringTemplate hello = new StringTemplate("Hello, $name$");
-    //hello.setAttribute("name", "World");
-    emailService.sendEmail("gert.vesterberg@gmail.com", template.getTitle(), template.getBodyText(), template.getBodyHtml());
+          @DefaultValue("EN") @QueryParam("language") String language,
+          HashMap<String, String> tags) {
+    final Template template = dao.find(id, language);
+    StringTemplate text = new StringTemplate(template.getBodyText());
+    StringTemplate html = new StringTemplate(template.getBodyHtml());
+
+    for (Map.Entry<String, String> entry : tags.entrySet()) {
+      text.setAttribute(entry.getKey(), entry.getValue());
+      html.setAttribute(entry.getKey(), entry.getValue());
+    }
+
+    emailService.sendEmail("gert.vesterberg@gmail.com", template.getTitle(), text.toString(), html.toString());
     return Response.status(Response.Status.OK).build();
   }
 }
