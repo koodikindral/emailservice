@@ -97,6 +97,7 @@ public class TemplateResource {
   @Path("{id}/test")
   public Response test(
           @PathParam("id") Long id,
+          @QueryParam("email") String email,
           @DefaultValue("EN") @QueryParam("language") String language,
           HashMap<String, String> tags) {
     final Template template = dao.find(id, language);
@@ -108,7 +109,7 @@ public class TemplateResource {
       html.setAttribute(entry.getKey(), entry.getValue());
     }
 
-    emailService.sendEmail("gert.vesterberg@gmail.com", template.getTitle(), text.toString(), html.toString());
+    emailService.sendEmail(email, template.getTitle(), text.toString(), html.toString());
     return Response.status(Response.Status.OK).build();
   }
 }
