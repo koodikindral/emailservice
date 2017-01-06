@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+    emailservice:
+        image: gert/emailservice:latest
+        container_name: emailservice
+        command: bin/emailservice server conf/config.yml
+        volumes:
+            - ./conf/test:/emailservice/conf:ro
