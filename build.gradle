@@ -13,7 +13,7 @@ repositories {
 }
 
 group = 'ee.gert'
-version = '0.0.2'
+version = '1.0.0'
 mainClassName = 'email.App'
 
 project.ext {
